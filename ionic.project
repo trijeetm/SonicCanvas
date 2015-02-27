@@ -1,0 +1,12 @@
+{
+  "name": "SonicCanvas",
+  "app_id": "b960ef1c",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}
