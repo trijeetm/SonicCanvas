@@ -5,7 +5,33 @@ angular.module('starter.controllers', [])
 .controller('DiscoverCtrl', function($scope) {})
 
 .controller('CanvasCtrl', function($scope, $firebase) {
+  $scope.initMIDI = function () {
+    // MIDI 
+    console.log('ylo');
+    MIDI.loadPlugin({
+      soundfontUrl: "./soundfont/",
+      instruments: [ "acoustic_grand_piano", "synth_drum" ],
+      callback: function() {
+        MIDI.noteOn(0, 1, 1, 0);
+        console.log('leggo');
+        MIDI.programChange(0, 0);
+        MIDI.programChange(1, 118);
+        console.log('lewp');
+        for (var n = 0; n < 100; n ++) {
+          var delay = n / 4; // play one note every quarter second
+          var note = MIDI.pianoKeyOffset + n; // the MIDI note
+          var velocity = 127; // how hard the note hits
+          // play the note
+          MIDI.noteOn(0, note, velocity, delay);
+          // play the some note 3-steps up
+          MIDI.noteOn(1, note + 3, velocity, delay);
+        }   
+      }
+    });
+  }
+
   $(function() {
+    // sketch.js
     $.each(['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#000', '#fff'], function() {
       $('#colors_demo .tools').append("<a href='#colors_sketch' data-color='" + this + "' style='display: inline-block; height: 20px; width: 20px; background: " + this + ";'></a> ");
     });
@@ -14,7 +40,6 @@ angular.module('starter.controllers', [])
     });
     $('#colors_sketch').sketch();
   });
-
 
   // $(document).ready(function () {
   //   //Set up some globals
