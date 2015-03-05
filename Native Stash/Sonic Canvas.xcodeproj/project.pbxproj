@@ -1,0 +1,824 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		867EF4A31A68AA6B00FD291C /* mo-audio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF47A1A68AA6B00FD291C /* mo-audio.mm */; };
+		867EF4A41A68AA6B00FD291C /* mo-buffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF47C1A68AA6B00FD291C /* mo-buffer.mm */; };
+		867EF4A51A68AA6B00FD291C /* mo-fft.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF47F1A68AA6B00FD291C /* mo-fft.mm */; };
+		867EF4A61A68AA6B00FD291C /* mo-fun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 867EF4801A68AA6B00FD291C /* mo-fun.cpp */; };
+		867EF4A71A68AA6B00FD291C /* mo-gfx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF4831A68AA6B00FD291C /* mo-gfx.mm */; };
+		867EF4A81A68AA6B00FD291C /* mo-glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 867EF4841A68AA6B00FD291C /* mo-glut.cpp */; };
+		867EF4A91A68AA6B00FD291C /* mo-thread.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF4871A68AA6B00FD291C /* mo-thread.mm */; };
+		867EF4AA1A68AA6B00FD291C /* mo-touch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 867EF4891A68AA6B00FD291C /* mo-touch.mm */; };
+		86C89C8E1A688DAD00799680 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C89C8D1A688DAD00799680 /* main.m */; };
+		86C89C911A688DAD00799680 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86C89C901A688DAD00799680 /* AppDelegate.mm */; };
+		86C89C941A688DAD00799680 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86C89C931A688DAD00799680 /* ViewController.mm */; };
+		86C89C971A688DAD00799680 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86C89C951A688DAD00799680 /* Main.storyboard */; };
+		86C89C991A688DAD00799680 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86C89C981A688DAD00799680 /* Images.xcassets */; };
+		86C89C9C1A688DAD00799680 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86C89C9A1A688DAD00799680 /* LaunchScreen.xib */; };
+		86C89CA81A688DAD00799680 /* GLoilerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C89CA71A688DAD00799680 /* GLoilerTests.m */; };
+		86C89CB21A688E9900799680 /* GLoilerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86C89CB11A688E9900799680 /* GLoilerViewController.mm */; };
+		86C89CF91A6891BD00799680 /* renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86C89CF81A6891BD00799680 /* renderer.mm */; };
+		86C89CFB1A68923600799680 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C89CFA1A68923600799680 /* AudioToolbox.framework */; };
+		86C89CFD1A68933800799680 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C89CFC1A68933800799680 /* GLKit.framework */; };
+		86C89D011A689A5000799680 /* DismissSegue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86C89D001A689A5000799680 /* DismissSegue.mm */; };
+		86F580DC1A8D860E000667C8 /* y-echo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86F580CF1A8D860E000667C8 /* y-echo.mm */; };
+		86F580DD1A8D860E000667C8 /* y-entity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86F580D11A8D860E000667C8 /* y-entity.mm */; };
+		86F580DF1A8D860E000667C8 /* y-particle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86F580D51A8D860E000667C8 /* y-particle.mm */; };
+		86F580E01A8D860E000667C8 /* y-score-reader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 86F580D71A8D860E000667C8 /* y-score-reader.mm */; };
+		86F580EC1A8D8630000667C8 /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86F580E31A8D8630000667C8 /* Delay.cpp */; };
+		86F580ED1A8D8630000667C8 /* DelayL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86F580E51A8D8630000667C8 /* DelayL.cpp */; };
+		86F580EE1A8D8630000667C8 /* MidiFileIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86F580E81A8D8630000667C8 /* MidiFileIn.cpp */; };
+		86F580EF1A8D8630000667C8 /* Stk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86F580EA1A8D8630000667C8 /* Stk.cpp */; };
+		86F581011A8D8648000667C8 /* libbassenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580F41A8D8648000667C8 /* libbassenc.a */; };
+		86F581021A8D8648000667C8 /* libbassflac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580F61A8D8648000667C8 /* libbassflac.a */; };
+		86F581031A8D8648000667C8 /* libbassmidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580F81A8D8648000667C8 /* libbassmidi.a */; };
+		86F581041A8D8648000667C8 /* libbassmix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580FB1A8D8648000667C8 /* libbassmix.a */; };
+		86F581051A8D8648000667C8 /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580FD1A8D8648000667C8 /* libbasswv.a */; };
+		86F581061A8D8648000667C8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F580FE1A8D8648000667C8 /* libbass.a */; };
+		86F581071A8D8648000667C8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F581001A8D8648000667C8 /* libbass.a */; };
+		86F5810B1A8DC56D000667C8 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F5810A1A8DC56D000667C8 /* CoreMIDI.framework */; };
+		86F5810E1A8DC5C1000667C8 /* y-basssynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86F5810C1A8DC5C1000667C8 /* y-basssynth.cpp */; };
+		86F581111A8DCC2B000667C8 /* rocking8m11e.sf2 in Resources */ = {isa = PBXBuildFile; fileRef = 86F581101A8DCC2B000667C8 /* rocking8m11e.sf2 */; };
+		86F581141A8DCC43000667C8 /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 86F581131A8DCC43000667C8 /* texture.png */; };
+		86F581161A8DCEED000667C8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F581151A8DCEED000667C8 /* Accelerate.framework */; };
+		D47A89F2D4F7C9A6A79DC633 /* libPods-GLoiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8B0E4A67B427930D2B7DD2 /* libPods-GLoiler.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		86C89CA21A688DAD00799680 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86C89C801A688DAD00799680 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86C89C871A688DAD00799680;
+			remoteInfo = GLoiler;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07BF32EDC68592EC7B92A305 /* Pods-GLoiler.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GLoiler.release.xcconfig"; path = "Pods/Target Support Files/Pods-GLoiler/Pods-GLoiler.release.xcconfig"; sourceTree = "<group>"; };
+		867EF4791A68AA6B00FD291C /* mo-audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-audio.h"; sourceTree = "<group>"; };
+		867EF47A1A68AA6B00FD291C /* mo-audio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-audio.mm"; sourceTree = "<group>"; };
+		867EF47B1A68AA6B00FD291C /* mo-buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-buffer.h"; sourceTree = "<group>"; };
+		867EF47C1A68AA6B00FD291C /* mo-buffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-buffer.mm"; sourceTree = "<group>"; };
+		867EF47D1A68AA6B00FD291C /* mo-def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-def.h"; sourceTree = "<group>"; };
+		867EF47E1A68AA6B00FD291C /* mo-fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-fft.h"; sourceTree = "<group>"; };
+		867EF47F1A68AA6B00FD291C /* mo-fft.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-fft.mm"; sourceTree = "<group>"; };
+		867EF4801A68AA6B00FD291C /* mo-fun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "mo-fun.cpp"; sourceTree = "<group>"; };
+		867EF4811A68AA6B00FD291C /* mo-fun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-fun.h"; sourceTree = "<group>"; };
+		867EF4821A68AA6B00FD291C /* mo-gfx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-gfx.h"; sourceTree = "<group>"; };
+		867EF4831A68AA6B00FD291C /* mo-gfx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-gfx.mm"; sourceTree = "<group>"; };
+		867EF4841A68AA6B00FD291C /* mo-glut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "mo-glut.cpp"; sourceTree = "<group>"; };
+		867EF4851A68AA6B00FD291C /* mo-glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-glut.h"; sourceTree = "<group>"; };
+		867EF4861A68AA6B00FD291C /* mo-thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-thread.h"; sourceTree = "<group>"; };
+		867EF4871A68AA6B00FD291C /* mo-thread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-thread.mm"; sourceTree = "<group>"; };
+		867EF4881A68AA6B00FD291C /* mo-touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mo-touch.h"; sourceTree = "<group>"; };
+		867EF4891A68AA6B00FD291C /* mo-touch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "mo-touch.mm"; sourceTree = "<group>"; };
+		86C89C881A688DAD00799680 /* GLoiler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GLoiler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86C89C8C1A688DAD00799680 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		86C89C8D1A688DAD00799680 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		86C89C8F1A688DAD00799680 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		86C89C901A688DAD00799680 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		86C89C921A688DAD00799680 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		86C89C931A688DAD00799680 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		86C89C961A688DAD00799680 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		86C89C981A688DAD00799680 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		86C89C9B1A688DAD00799680 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		86C89CA11A688DAD00799680 /* GLoilerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GLoilerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		86C89CA61A688DAD00799680 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		86C89CA71A688DAD00799680 /* GLoilerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GLoilerTests.m; sourceTree = "<group>"; };
+		86C89CB11A688E9900799680 /* GLoilerViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLoilerViewController.mm; sourceTree = "<group>"; };
+		86C89CB31A688F4900799680 /* GLoilerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLoilerViewController.h; sourceTree = "<group>"; };
+		86C89CF71A6891BD00799680 /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderer.h; sourceTree = "<group>"; };
+		86C89CF81A6891BD00799680 /* renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = renderer.mm; sourceTree = "<group>"; };
+		86C89CFA1A68923600799680 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		86C89CFC1A68933800799680 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		86C89CFF1A689A5000799680 /* DismissSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DismissSegue.h; sourceTree = "<group>"; };
+		86C89D001A689A5000799680 /* DismissSegue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DismissSegue.mm; sourceTree = "<group>"; };
+		86F580CE1A8D860E000667C8 /* y-echo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "y-echo.h"; sourceTree = "<group>"; };
+		86F580CF1A8D860E000667C8 /* y-echo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "y-echo.mm"; sourceTree = "<group>"; };
+		86F580D01A8D860E000667C8 /* y-entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "y-entity.h"; sourceTree = "<group>"; };
+		86F580D11A8D860E000667C8 /* y-entity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "y-entity.mm"; sourceTree = "<group>"; };
+		86F580D41A8D860E000667C8 /* y-particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "y-particle.h"; sourceTree = "<group>"; };
+		86F580D51A8D860E000667C8 /* y-particle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "y-particle.mm"; sourceTree = "<group>"; };
+		86F580D61A8D860E000667C8 /* y-score-reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "y-score-reader.h"; sourceTree = "<group>"; };
+		86F580D71A8D860E000667C8 /* y-score-reader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "y-score-reader.mm"; sourceTree = "<group>"; };
+		86F580E31A8D8630000667C8 /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delay.cpp; sourceTree = "<group>"; };
+		86F580E41A8D8630000667C8 /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delay.h; sourceTree = "<group>"; };
+		86F580E51A8D8630000667C8 /* DelayL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DelayL.cpp; sourceTree = "<group>"; };
+		86F580E61A8D8630000667C8 /* DelayL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DelayL.h; sourceTree = "<group>"; };
+		86F580E71A8D8630000667C8 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		86F580E81A8D8630000667C8 /* MidiFileIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MidiFileIn.cpp; sourceTree = "<group>"; };
+		86F580E91A8D8630000667C8 /* MidiFileIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MidiFileIn.h; sourceTree = "<group>"; };
+		86F580EA1A8D8630000667C8 /* Stk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stk.cpp; sourceTree = "<group>"; };
+		86F580EB1A8D8630000667C8 /* Stk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stk.h; sourceTree = "<group>"; };
+		86F580F21A8D8648000667C8 /* bass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
+		86F580F41A8D8648000667C8 /* libbassenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassenc.a; sourceTree = "<group>"; };
+		86F580F61A8D8648000667C8 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassflac.a; sourceTree = "<group>"; };
+		86F580F81A8D8648000667C8 /* libbassmidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassmidi.a; sourceTree = "<group>"; };
+		86F580F91A8D8648000667C8 /* bassmidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bassmidi.h; sourceTree = "<group>"; };
+		86F580FB1A8D8648000667C8 /* libbassmix.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassmix.a; sourceTree = "<group>"; };
+		86F580FD1A8D8648000667C8 /* libbasswv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbasswv.a; sourceTree = "<group>"; };
+		86F580FE1A8D8648000667C8 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
+		86F581001A8D8648000667C8 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
+		86F5810A1A8DC56D000667C8 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		86F5810C1A8DC5C1000667C8 /* y-basssynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "y-basssynth.cpp"; sourceTree = "<group>"; };
+		86F5810D1A8DC5C1000667C8 /* y-basssynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "y-basssynth.h"; sourceTree = "<group>"; };
+		86F581101A8DCC2B000667C8 /* rocking8m11e.sf2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = rocking8m11e.sf2; sourceTree = "<group>"; };
+		86F581131A8DCC43000667C8 /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture.png; sourceTree = "<group>"; };
+		86F581151A8DCEED000667C8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		9E72EEF8C421FD52C66432BE /* Pods-GLoiler.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GLoiler.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GLoiler/Pods-GLoiler.debug.xcconfig"; sourceTree = "<group>"; };
+		FC8B0E4A67B427930D2B7DD2 /* libPods-GLoiler.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GLoiler.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		86C89C851A688DAD00799680 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F581161A8DCEED000667C8 /* Accelerate.framework in Frameworks */,
+				86F5810B1A8DC56D000667C8 /* CoreMIDI.framework in Frameworks */,
+				86F581061A8D8648000667C8 /* libbass.a in Frameworks */,
+				86F581011A8D8648000667C8 /* libbassenc.a in Frameworks */,
+				86F581071A8D8648000667C8 /* libbass.a in Frameworks */,
+				86F581041A8D8648000667C8 /* libbassmix.a in Frameworks */,
+				86F581031A8D8648000667C8 /* libbassmidi.a in Frameworks */,
+				86C89CFD1A68933800799680 /* GLKit.framework in Frameworks */,
+				86F581021A8D8648000667C8 /* libbassflac.a in Frameworks */,
+				86C89CFB1A68923600799680 /* AudioToolbox.framework in Frameworks */,
+				86F581051A8D8648000667C8 /* libbasswv.a in Frameworks */,
+				D47A89F2D4F7C9A6A79DC633 /* libPods-GLoiler.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86C89C9E1A688DAD00799680 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		74E80984695AAAD5102B8F0F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9E72EEF8C421FD52C66432BE /* Pods-GLoiler.debug.xcconfig */,
+				07BF32EDC68592EC7B92A305 /* Pods-GLoiler.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		867EF4771A68AA6B00FD291C /* api */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F01A8D8648000667C8 /* 3rd-party */,
+				867EF4781A68AA6B00FD291C /* momu */,
+				86F580E21A8D8630000667C8 /* stk */,
+				86F580C91A8D860E000667C8 /* y-api */,
+			);
+			name = api;
+			path = GLoiler/api;
+			sourceTree = "<group>";
+		};
+		867EF4781A68AA6B00FD291C /* momu */ = {
+			isa = PBXGroup;
+			children = (
+				867EF4791A68AA6B00FD291C /* mo-audio.h */,
+				867EF47A1A68AA6B00FD291C /* mo-audio.mm */,
+				867EF47B1A68AA6B00FD291C /* mo-buffer.h */,
+				867EF47C1A68AA6B00FD291C /* mo-buffer.mm */,
+				867EF47D1A68AA6B00FD291C /* mo-def.h */,
+				867EF47E1A68AA6B00FD291C /* mo-fft.h */,
+				867EF47F1A68AA6B00FD291C /* mo-fft.mm */,
+				867EF4801A68AA6B00FD291C /* mo-fun.cpp */,
+				867EF4811A68AA6B00FD291C /* mo-fun.h */,
+				867EF4821A68AA6B00FD291C /* mo-gfx.h */,
+				867EF4831A68AA6B00FD291C /* mo-gfx.mm */,
+				867EF4841A68AA6B00FD291C /* mo-glut.cpp */,
+				867EF4851A68AA6B00FD291C /* mo-glut.h */,
+				867EF4861A68AA6B00FD291C /* mo-thread.h */,
+				867EF4871A68AA6B00FD291C /* mo-thread.mm */,
+				867EF4881A68AA6B00FD291C /* mo-touch.h */,
+				867EF4891A68AA6B00FD291C /* mo-touch.mm */,
+			);
+			path = momu;
+			sourceTree = "<group>";
+		};
+		8692A6291A71C7C800D096FD /* data */ = {
+			isa = PBXGroup;
+			children = (
+				86F5810F1A8DCC2B000667C8 /* sfonts */,
+				86F581121A8DCC43000667C8 /* textures */,
+			);
+			name = data;
+			path = GLoiler/data;
+			sourceTree = "<group>";
+		};
+		86C89C7F1A688DAD00799680 = {
+			isa = PBXGroup;
+			children = (
+				867EF4771A68AA6B00FD291C /* api */,
+				86C89CF61A6891BD00799680 /* core */,
+				8692A6291A71C7C800D096FD /* data */,
+				86C89C8A1A688DAD00799680 /* SonicCanvas */,
+				86C89CA41A688DAD00799680 /* GLoilerTests */,
+				86C89CFE1A68969900799680 /* Frameworks */,
+				86C89C891A688DAD00799680 /* Products */,
+				74E80984695AAAD5102B8F0F /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		86C89C891A688DAD00799680 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				86C89C881A688DAD00799680 /* GLoiler.app */,
+				86C89CA11A688DAD00799680 /* GLoilerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		86C89C8A1A688DAD00799680 /* SonicCanvas */ = {
+			isa = PBXGroup;
+			children = (
+				86C89C8F1A688DAD00799680 /* AppDelegate.h */,
+				86C89C901A688DAD00799680 /* AppDelegate.mm */,
+				86C89CFF1A689A5000799680 /* DismissSegue.h */,
+				86C89D001A689A5000799680 /* DismissSegue.mm */,
+				86C89C921A688DAD00799680 /* ViewController.h */,
+				86C89C931A688DAD00799680 /* ViewController.mm */,
+				86C89C951A688DAD00799680 /* Main.storyboard */,
+				86C89CB11A688E9900799680 /* GLoilerViewController.mm */,
+				86C89CB31A688F4900799680 /* GLoilerViewController.h */,
+				86C89C981A688DAD00799680 /* Images.xcassets */,
+				86C89C9A1A688DAD00799680 /* LaunchScreen.xib */,
+				86C89C8B1A688DAD00799680 /* Supporting Files */,
+			);
+			name = SonicCanvas;
+			path = GLoiler;
+			sourceTree = "<group>";
+		};
+		86C89C8B1A688DAD00799680 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				86C89C8C1A688DAD00799680 /* Info.plist */,
+				86C89C8D1A688DAD00799680 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		86C89CA41A688DAD00799680 /* GLoilerTests */ = {
+			isa = PBXGroup;
+			children = (
+				86C89CA71A688DAD00799680 /* GLoilerTests.m */,
+				86C89CA51A688DAD00799680 /* Supporting Files */,
+			);
+			path = GLoilerTests;
+			sourceTree = "<group>";
+		};
+		86C89CA51A688DAD00799680 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				86C89CA61A688DAD00799680 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		86C89CF61A6891BD00799680 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				86C89CF71A6891BD00799680 /* renderer.h */,
+				86C89CF81A6891BD00799680 /* renderer.mm */,
+			);
+			name = core;
+			path = GLoiler/core;
+			sourceTree = "<group>";
+		};
+		86C89CFE1A68969900799680 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				86F581151A8DCEED000667C8 /* Accelerate.framework */,
+				86F5810A1A8DC56D000667C8 /* CoreMIDI.framework */,
+				86C89CFC1A68933800799680 /* GLKit.framework */,
+				86C89CFA1A68923600799680 /* AudioToolbox.framework */,
+				FC8B0E4A67B427930D2B7DD2 /* libPods-GLoiler.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		86F580C91A8D860E000667C8 /* y-api */ = {
+			isa = PBXGroup;
+			children = (
+				86F5810D1A8DC5C1000667C8 /* y-basssynth.h */,
+				86F5810C1A8DC5C1000667C8 /* y-basssynth.cpp */,
+				86F580CE1A8D860E000667C8 /* y-echo.h */,
+				86F580CF1A8D860E000667C8 /* y-echo.mm */,
+				86F580D01A8D860E000667C8 /* y-entity.h */,
+				86F580D11A8D860E000667C8 /* y-entity.mm */,
+				86F580D41A8D860E000667C8 /* y-particle.h */,
+				86F580D51A8D860E000667C8 /* y-particle.mm */,
+				86F580D61A8D860E000667C8 /* y-score-reader.h */,
+				86F580D71A8D860E000667C8 /* y-score-reader.mm */,
+			);
+			path = "y-api";
+			sourceTree = "<group>";
+		};
+		86F580E21A8D8630000667C8 /* stk */ = {
+			isa = PBXGroup;
+			children = (
+				86F580E31A8D8630000667C8 /* Delay.cpp */,
+				86F580E41A8D8630000667C8 /* Delay.h */,
+				86F580E51A8D8630000667C8 /* DelayL.cpp */,
+				86F580E61A8D8630000667C8 /* DelayL.h */,
+				86F580E71A8D8630000667C8 /* Filter.h */,
+				86F580E81A8D8630000667C8 /* MidiFileIn.cpp */,
+				86F580E91A8D8630000667C8 /* MidiFileIn.h */,
+				86F580EA1A8D8630000667C8 /* Stk.cpp */,
+				86F580EB1A8D8630000667C8 /* Stk.h */,
+			);
+			path = stk;
+			sourceTree = "<group>";
+		};
+		86F580F01A8D8648000667C8 /* 3rd-party */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F11A8D8648000667C8 /* bass */,
+			);
+			path = "3rd-party";
+			sourceTree = "<group>";
+		};
+		86F580F11A8D8648000667C8 /* bass */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F21A8D8648000667C8 /* bass.h */,
+				86F580F31A8D8648000667C8 /* bassenc */,
+				86F580F51A8D8648000667C8 /* bassflac */,
+				86F580F71A8D8648000667C8 /* bassmidi */,
+				86F580F91A8D8648000667C8 /* bassmidi.h */,
+				86F580FA1A8D8648000667C8 /* bassmix */,
+				86F580FC1A8D8648000667C8 /* basswv */,
+				86F580FE1A8D8648000667C8 /* libbass.a */,
+				86F580FF1A8D8648000667C8 /* mp3-free */,
+			);
+			path = bass;
+			sourceTree = "<group>";
+		};
+		86F580F31A8D8648000667C8 /* bassenc */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F41A8D8648000667C8 /* libbassenc.a */,
+			);
+			path = bassenc;
+			sourceTree = "<group>";
+		};
+		86F580F51A8D8648000667C8 /* bassflac */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F61A8D8648000667C8 /* libbassflac.a */,
+			);
+			path = bassflac;
+			sourceTree = "<group>";
+		};
+		86F580F71A8D8648000667C8 /* bassmidi */ = {
+			isa = PBXGroup;
+			children = (
+				86F580F81A8D8648000667C8 /* libbassmidi.a */,
+			);
+			path = bassmidi;
+			sourceTree = "<group>";
+		};
+		86F580FA1A8D8648000667C8 /* bassmix */ = {
+			isa = PBXGroup;
+			children = (
+				86F580FB1A8D8648000667C8 /* libbassmix.a */,
+			);
+			path = bassmix;
+			sourceTree = "<group>";
+		};
+		86F580FC1A8D8648000667C8 /* basswv */ = {
+			isa = PBXGroup;
+			children = (
+				86F580FD1A8D8648000667C8 /* libbasswv.a */,
+			);
+			path = basswv;
+			sourceTree = "<group>";
+		};
+		86F580FF1A8D8648000667C8 /* mp3-free */ = {
+			isa = PBXGroup;
+			children = (
+				86F581001A8D8648000667C8 /* libbass.a */,
+			);
+			path = "mp3-free";
+			sourceTree = "<group>";
+		};
+		86F5810F1A8DCC2B000667C8 /* sfonts */ = {
+			isa = PBXGroup;
+			children = (
+				86F581101A8DCC2B000667C8 /* rocking8m11e.sf2 */,
+			);
+			path = sfonts;
+			sourceTree = "<group>";
+		};
+		86F581121A8DCC43000667C8 /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				86F581131A8DCC43000667C8 /* texture.png */,
+			);
+			path = textures;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		86C89C871A688DAD00799680 /* GLoiler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86C89CAB1A688DAD00799680 /* Build configuration list for PBXNativeTarget "GLoiler" */;
+			buildPhases = (
+				48E6433855929C81F2D67365 /* Check Pods Manifest.lock */,
+				86C89C841A688DAD00799680 /* Sources */,
+				86C89C851A688DAD00799680 /* Frameworks */,
+				86C89C861A688DAD00799680 /* Resources */,
+				FABA14430FF4848B90660125 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GLoiler;
+			productName = GLoiler;
+			productReference = 86C89C881A688DAD00799680 /* GLoiler.app */;
+			productType = "com.apple.product-type.application";
+		};
+		86C89CA01A688DAD00799680 /* GLoilerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86C89CAE1A688DAD00799680 /* Build configuration list for PBXNativeTarget "GLoilerTests" */;
+			buildPhases = (
+				86C89C9D1A688DAD00799680 /* Sources */,
+				86C89C9E1A688DAD00799680 /* Frameworks */,
+				86C89C9F1A688DAD00799680 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				86C89CA31A688DAD00799680 /* PBXTargetDependency */,
+			);
+			name = GLoilerTests;
+			productName = GLoilerTests;
+			productReference = 86C89CA11A688DAD00799680 /* GLoilerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		86C89C801A688DAD00799680 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Ge Wang";
+				TargetAttributes = {
+					86C89C871A688DAD00799680 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					86C89CA01A688DAD00799680 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 86C89C871A688DAD00799680;
+					};
+				};
+			};
+			buildConfigurationList = 86C89C831A688DAD00799680 /* Build configuration list for PBXProject "Sonic Canvas" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 86C89C7F1A688DAD00799680;
+			productRefGroup = 86C89C891A688DAD00799680 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				86C89C871A688DAD00799680 /* GLoiler */,
+				86C89CA01A688DAD00799680 /* GLoilerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		86C89C861A688DAD00799680 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F581141A8DCC43000667C8 /* texture.png in Resources */,
+				86C89C971A688DAD00799680 /* Main.storyboard in Resources */,
+				86F581111A8DCC2B000667C8 /* rocking8m11e.sf2 in Resources */,
+				86C89C9C1A688DAD00799680 /* LaunchScreen.xib in Resources */,
+				86C89C991A688DAD00799680 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86C89C9F1A688DAD00799680 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		48E6433855929C81F2D67365 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FABA14430FF4848B90660125 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GLoiler/Pods-GLoiler-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		86C89C841A688DAD00799680 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86C89C941A688DAD00799680 /* ViewController.mm in Sources */,
+				867EF4A61A68AA6B00FD291C /* mo-fun.cpp in Sources */,
+				867EF4A31A68AA6B00FD291C /* mo-audio.mm in Sources */,
+				86F580ED1A8D8630000667C8 /* DelayL.cpp in Sources */,
+				867EF4A51A68AA6B00FD291C /* mo-fft.mm in Sources */,
+				86F580EE1A8D8630000667C8 /* MidiFileIn.cpp in Sources */,
+				86F580DD1A8D860E000667C8 /* y-entity.mm in Sources */,
+				86F580EC1A8D8630000667C8 /* Delay.cpp in Sources */,
+				86F580E01A8D860E000667C8 /* y-score-reader.mm in Sources */,
+				86F5810E1A8DC5C1000667C8 /* y-basssynth.cpp in Sources */,
+				86C89C911A688DAD00799680 /* AppDelegate.mm in Sources */,
+				867EF4A91A68AA6B00FD291C /* mo-thread.mm in Sources */,
+				867EF4A71A68AA6B00FD291C /* mo-gfx.mm in Sources */,
+				86F580EF1A8D8630000667C8 /* Stk.cpp in Sources */,
+				86C89C8E1A688DAD00799680 /* main.m in Sources */,
+				86C89D011A689A5000799680 /* DismissSegue.mm in Sources */,
+				867EF4AA1A68AA6B00FD291C /* mo-touch.mm in Sources */,
+				86F580DF1A8D860E000667C8 /* y-particle.mm in Sources */,
+				86C89CB21A688E9900799680 /* GLoilerViewController.mm in Sources */,
+				867EF4A81A68AA6B00FD291C /* mo-glut.cpp in Sources */,
+				86C89CF91A6891BD00799680 /* renderer.mm in Sources */,
+				86F580DC1A8D860E000667C8 /* y-echo.mm in Sources */,
+				867EF4A41A68AA6B00FD291C /* mo-buffer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86C89C9D1A688DAD00799680 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86C89CA81A688DAD00799680 /* GLoilerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		86C89CA31A688DAD00799680 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86C89C871A688DAD00799680 /* GLoiler */;
+			targetProxy = 86C89CA21A688DAD00799680 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		86C89C951A688DAD00799680 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86C89C961A688DAD00799680 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		86C89C9A1A688DAD00799680 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86C89C9B1A688DAD00799680 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		86C89CA91A688DAD00799680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		86C89CAA1A688DAD00799680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		86C89CAC1A688DAD00799680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E72EEF8C421FD52C66432BE /* Pods-GLoiler.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = GLoiler/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassenc",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassflac",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassmidi",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassmix",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/basswv",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/mp3-free",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		86C89CAD1A688DAD00799680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07BF32EDC68592EC7B92A305 /* Pods-GLoiler.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = GLoiler/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassenc",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassflac",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassmidi",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/bassmix",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/basswv",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass",
+					"$(PROJECT_DIR)/GLoiler/api/3rd-party/bass/mp3-free",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		86C89CAF1A688DAD00799680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = GLoilerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GLoiler.app/GLoiler";
+			};
+			name = Debug;
+		};
+		86C89CB01A688DAD00799680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = GLoilerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GLoiler.app/GLoiler";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		86C89C831A688DAD00799680 /* Build configuration list for PBXProject "Sonic Canvas" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86C89CA91A688DAD00799680 /* Debug */,
+				86C89CAA1A688DAD00799680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86C89CAB1A688DAD00799680 /* Build configuration list for PBXNativeTarget "GLoiler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86C89CAC1A688DAD00799680 /* Debug */,
+				86C89CAD1A688DAD00799680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86C89CAE1A688DAD00799680 /* Build configuration list for PBXNativeTarget "GLoilerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86C89CAF1A688DAD00799680 /* Debug */,
+				86C89CB01A688DAD00799680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 86C89C801A688DAD00799680 /* Project object */;
+}
