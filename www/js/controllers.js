@@ -4,69 +4,63 @@ angular.module('starter.controllers', [])
 
 .controller('DiscoverCtrl', function($scope) {})
 
-.controller('CanvasCtrl', function($scope, $firebase) {
-
-  var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/');
-  console.log( 'firebase setup done' );
-
-  // MIDI 
-  MIDI.loadPlugin({
-    soundfontUrl: "./soundfont/",
-    instruments: [ "acoustic_grand_piano", "synth_drum" ],
-    callback: function() {
-      MIDI.noteOn(0, 1, 1, 0);
-
-      pixelDataRef.on('child_added', function (snapshot) {
-        var coordsOld = snapshot.key().split(':')[0].split(',');
-        var coords = snapshot.key().split(':')[1].split(',');
-        var col = snapshot.val();
-
-        canvas.lineCap = 'round';
-        canvas.lineJoin = 'round';
-
-        canvas.fillStyle = canvas.strokeStyle = col;
-
-        // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
-
-        canvas.lineWidth = radius;
-        canvas.beginPath();
-        canvas.moveTo(coordsOld[0], coordsOld[1]);
-        canvas.lineTo(coords[0], coords[1]);
-        canvas.stroke();
-
-        MIDI.programChange(0, 0);
-        var note = Math.floor((coords[0] / 400) * 127);
-        var velocity = Math.floor((coords[1] / 500) * 127);
-        if (velocity > 127) velocity = 127;
-        MIDI.noteOn(0, note, velocity, 0);
-      });
-
-
-      // MIDI.programChange(0, 0);
-      // MIDI.programChange(1, 118);
-      // for (var n = 0; n < 5; n ++) {
-      //   var delay = 0;
-      //   var note = 24 + 12 * n;
-      //   var velocity = 127; // how hard the note hits
-      //   // play the note
-      //   MIDI.noteOn(0, note, velocity, delay);
-      // }   
-    }
+.controller('CanvasCtrl', function($scope, $firebase, $ionicLoading) {
+  // block UI till canvas loaded
+  $ionicLoading.show({
+    template: 'Loading Sonic Canvas...'
   });
 
-  var COLOURS = [ 'tomato', '#A7EBCA', '#FFFFFF', '#D8EBA7', '#868E80' ];
-  var radius = 0;
+  // canvas globals
+  var controlsUIHeight = 49 + 24;
+  var controlsUIWidth = $(window).width();
+  var canvasWidth = $(window).width();
+  var canvasHeight = $(window).height() - controlsUIHeight;
+  var brushColor = 0;
+  var brushColors = [
+    '#445878', 'orange', 'crimson', 'dodgerblue', 'teal', 'yellowgreen', 'white'
+  ];
+  var brushRadius = 10;
+  var kMaxBrushRadius = 20;
 
+  // canvas controls 
+  var controlsUI = $('#brushes');
+  for (var i = 0; i < brushColors.length; i++) {
+    var brush = document.createElement('div');
+    brush.className = 'brush ' + i;
+    brush.style.background = brushColors[i];
+    brush.style.width = ((controlsUIWidth / brushColors.length) - 3) + 'px';
+    brush.style.height = '45px';
+    console.log('creating brush ' + i);
+    console.log('added brush ' + i);
+    controlsUI.append(brush);
+  };
+
+  $('.brush').click(function() {
+    brushColor = this.className.split(' ')[1];
+    for (var i = 0; i < brushColors.length; i++)
+      $('.brush')[i].style.outline = '0px solid #fff';
+    this.style.outline = '2px solid #fff';
+    console.log('changed color to: ' + brushColor);
+  });
+
+  // firebase reference
+  var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/');
+  console.log('firebase setup done');
+
+  // canvas creation
   var canvas = Sketch.create({
-      container: document.getElementById( 'container' ),
+      container: document.getElementById( 'canvas' ),
       autoclear: false,
+      fullscreen: false,
+      width: canvasWidth,
+      height: canvasHeight,
       setup: function() {
         console.log( 'sketch setup' );
+        $('.brush')[0].click();
       },
       update: function() {
         // console.log('update');
-        // radius = 2 + abs( sin( this.millis * 0.003 ) * 50 );
-        radius = 10;
+        brushRadius = $('.brush-size')[0].value;
       },
       // Event handlers
       keydown: function() {
@@ -80,18 +74,47 @@ angular.module('starter.controllers', [])
         for ( var i = this.touches.length - 1, touch; i >= 0; i-- ) {
             touch = this.touches[i];
 
-            this.fillStyle = this.strokeStyle = COLOURS[ i % COLOURS.length ];
+            this.fillStyle = this.strokeStyle = brushColors[brushColor];
 
-            pixelDataRef.child(touch.ox + ',' + touch.oy + ':' + touch.x + ',' + touch.y).set(this.fillStyle);
+            pixelDataRef.child(touch.ox + ',' + touch.oy + ':' + touch.x + ',' + touch.y).set(this.fillStyle + ':' + brushRadius);
         }
       }
   });
 
+  pixelDataRef.on('child_added', function (snapshot) {
+    var coordsOld = snapshot.key().split(':')[0].split(',');
+    var coords = snapshot.key().split(':')[1].split(',');
+    var col = snapshot.val().split(':')[0];
+    var radius = snapshot.val().split(':')[1];
+
+    canvas.lineCap = 'round';
+    canvas.lineJoin = 'round';
+
+    canvas.fillStyle = canvas.strokeStyle = col;
+
+    // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
+
+    canvas.lineWidth = radius;
+    canvas.beginPath();
+    canvas.moveTo(coordsOld[0], coordsOld[1]);
+    canvas.lineTo(coords[0], coords[1]);
+    canvas.stroke();
+
+    // MIDI.programChange(0, 95);
+    // var note = Math.floor((coords[0] / 400) * 127);
+    // if (note < 24) note = 24;
+    // if (note > 127) note = 127;
+    // var velocity = Math.floor((coords[1] / 500) * 127);
+    // if (velocity > 127) velocity = 127;
+    // MIDI.noteOn(0, note, velocity, 0);
+    // MIDI.noteOff(0, note, 2);
+  });
 
   pixelDataRef.on('child_changed', function (snapshot) {
     var coordsOld = snapshot.key().split(':')[0].split(',');
     var coords = snapshot.key().split(':')[1].split(',');
-    var col = snapshot.val();
+    var col = snapshot.val().split(':')[0];
+    var radius = snapshot.val().split(':')[1];
 
     canvas.lineCap = 'round';
     canvas.lineJoin = 'round';
@@ -119,44 +142,29 @@ angular.module('starter.controllers', [])
 
     // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
 
-    canvas.lineWidth = radius + 1;
+    canvas.lineWidth = kMaxBrushRadius * 2;
     canvas.beginPath();
     canvas.moveTo(coordsOld[0], coordsOld[1]);
     canvas.lineTo(coords[0], coords[1]);
     canvas.stroke();
   });
 
-  // $(function() {
-  //   // MIDI 
-  //   console.log('ylo');
-  //   MIDI.loadPlugin({
-  //     soundfontUrl: "./soundfont/",
-  //     instruments: [ "acoustic_grand_piano", "synth_drum" ],
-  //     callback: function() {
-  //       MIDI.noteOn(0, 1, 1, 0);
-  //       console.log('leggo');
-  //       MIDI.programChange(0, 0);
-  //       MIDI.programChange(1, 118);
-  //       console.log('lewp');
-  //       for (var n = 0; n < 5; n ++) {
-  //         var delay = 0;
-  //         var note = 24 + 12 * n;
-  //         var velocity = 127; // how hard the note hits
-  //         // play the note
-  //         MIDI.noteOn(0, note, velocity, delay);
-  //       }   
-  //     }
-  //   });
-
-  //   // // sketch.js
-  //   // $.each(['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#000', '#fff'], function() {
-  //   //   $('#colors_demo .tools').append("<a href='#colors_sketch' data-color='" + this + "' style='display: inline-block; height: 20px; width: 20px; background: " + this + ";'></a> ");
-  //   // });
-  //   // $.each([3, 5, 10, 15], function() {
-  //   //   $('#colors_demo .tools').append("<a href='#colors_sketch' data-size='" + this + "' style='background: #ccc'>" + this + "</a> ");
-  //   // });
-  //   // $('#colors_sketch').sketch();
-  // });
+  // MIDI 
+  MIDI.loadPlugin({
+    soundfontUrl: "./soundfont/FluidR3_GM/",
+    instruments: [
+      "acoustic_grand_piano", 
+      "pad_8_sweep" 
+    ],
+    callback: function() {
+      // MIDI.noteOn(0, 1, 1, 0);
+      console.log('MIDI loaded');
+      $ionicLoading.hide();
+      // MIDI.programChange(0, 95);
+      // MIDI.noteOn(0, 36, 120, 0);
+      // MIDI.noteOff(0, 36, 5);
+    }
+  });
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {

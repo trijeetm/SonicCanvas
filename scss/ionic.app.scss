@@ -21,3 +21,45 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+#canvas-controls {
+	background: $dark;
+	border-top: 2px solid $dark;
+	border-bottom: 2px solid $dark;
+	padding-top: 5px;
+}
+
+#pull-up-controls {
+	display: block;
+	height: 30px;
+	width: 30px;
+	text-align: center;
+	line-height: 30px;
+	font-size: 20px;
+	color: #fff;
+	background: $dark;
+	border-radius: 30px;
+	position: absolute;
+	margin-left: 50%;
+	left: -15px;
+	margin-top: -20px;
+}
+
+#brushes {
+	margin-top: 15px;
+}
+
+.brush {
+	margin-left: 3px;
+	display: inline-block;
+}
+
+.brush-size-range {
+	i {
+		color: #fff;
+	}
+}
+
+.brush-size {
+	margin: 0;
+	height: 30px !important;
+}

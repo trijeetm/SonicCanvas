@@ -7014,3 +7014,38 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+#canvas-controls {
+  background: #444;
+  border-top: 2px solid #444;
+  border-bottom: 2px solid #444;
+  padding-top: 5px; }
+
+#pull-up-controls {
+  display: block;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 20px;
+  color: #fff;
+  background: #444;
+  border-radius: 30px;
+  position: absolute;
+  margin-left: 50%;
+  left: -15px;
+  margin-top: -20px; }
+
+#brushes {
+  margin-top: 15px; }
+
+.brush {
+  margin-left: 3px;
+  display: inline-block; }
+
+.brush-size-range i {
+  color: #fff; }
+
+.brush-size {
+  margin: 0;
+  height: 30px !important; }
