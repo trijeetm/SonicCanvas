@@ -5,6 +5,13 @@ angular.module('starter.controllers', [])
 .controller('DiscoverCtrl', function($scope) {})
 
 .controller('CanvasCtrl', function($scope, $firebase, $ionicLoading) {
+  // Date.now() shim
+  if (!Date.now) {
+      Date.now = function() { 
+        return new Date().getTime(); 
+      }
+  }
+
   // class: Patch
   function Patch(channel, program, minVolume, freq) {
     this.channel = channel;
@@ -159,14 +166,14 @@ angular.module('starter.controllers', [])
 
             this.fillStyle = this.strokeStyle = brushColors[brushColor];
 
-            pixelDataRef.child(touch.ox + ',' + touch.oy + ':' + touch.x + ',' + touch.y).set(brushColor + ':' + brushRadius);
+            pixelDataRef.child(Date.now() + ':' + touch.ox + ',' + touch.oy + ':' + touch.x + ',' + touch.y).set(brushColor + ':' + brushRadius);
         }
       }
   });
 
   pixelDataRef.on('child_added', function (snapshot) {
-    var coordsOld = snapshot.key().split(':')[0].split(',');
-    var coords = snapshot.key().split(':')[1].split(',');
+    var coordsOld = snapshot.key().split(':')[1].split(',');
+    var coords = snapshot.key().split(':')[2].split(',');
     var col = snapshot.val().split(':')[0];
     var radius = snapshot.val().split(':')[1];
 
@@ -195,8 +202,8 @@ angular.module('starter.controllers', [])
   });
 
   pixelDataRef.on('child_changed', function (snapshot) {
-    var coordsOld = snapshot.key().split(':')[0].split(',');
-    var coords = snapshot.key().split(':')[1].split(',');
+    var coordsOld = snapshot.key().split(':')[1].split(',');
+    var coords = snapshot.key().split(':')[2].split(',');
     var col = brushColors[snapshot.val().split(':')[0]];
     var radius = snapshot.val().split(':')[1];
 
@@ -215,8 +222,8 @@ angular.module('starter.controllers', [])
   });
 
   pixelDataRef.on('child_removed', function (snapshot) {
-    var coordsOld = snapshot.key().split(':')[0].split(',');
-    var coords = snapshot.key().split(':')[1].split(',');
+    var coordsOld = snapshot.key().split(':')[1].split(',');
+    var coords = snapshot.key().split(':')[2].split(',');
     var col = '#FFFFFF';
 
     canvas.lineCap = 'round';
