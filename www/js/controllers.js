@@ -1,10 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
-
-.controller('DiscoverCtrl', function($scope) {})
-
-.controller('CanvasCtrl', function($scope, $firebase, $ionicLoading) {
+.controller('CanvasCtrl', function($scope, $stateParams, $firebase, $ionicLoading, $ionicHistory) {
   // Date.now() shim
   if (!Date.now) {
       Date.now = function() { 
@@ -25,14 +21,19 @@ angular.module('starter.controllers', [])
     if (this.volume === 0)
       this.volume = this.minVolume;
     if (this.volume < 127)
-      this.volume = this.volume + 0.1;
+      this.volume = this.volume + 0.025;
   };
   Patch.prototype.decreaseVolume = function() {
     if (this.volume > 0)
-      this.volume = this.volume - 0.1;
+      this.volume = this.volume - 0.025;
+    if (Math.floor(this.volume) === this.minVolume)
+      this.volume = 0;
   };
   Patch.prototype.killVolume = function() {
       this.volume = 0;
+  };
+  Patch.prototype.resetVolume = function() {
+      this.volume = this.minVolume;
   };
   Patch.prototype.increaseDensity = function() {
     this.density++;
@@ -96,21 +97,28 @@ angular.module('starter.controllers', [])
   var brushColors = [
     '#445878', 'orange', 'crimson', 'dodgerblue', 'teal', 'yellowgreen', 'white'
   ];
+  var eraser = brushColors.length - 1;
   var brushRadius = 10;
-  var kMaxBrushRadius = 20;
+  var kEraserCorrectionRadius = 1;
 
   // music globals
   var scale = [
-    0, 2, 4, 6, 7, 9, 11
+    midiNotes['c0'],
+    midiNotes['d_0'],
+    midiNotes['f0'],
+    midiNotes['g0'],
+    midiNotes['a_0']
   ];
 
   var patches = [
     new Patch(0, 95, 0, 1000),
-    new Patch(1, 0, 20, 2500),
-    new Patch(2, 104, 10, 500),
-    new Patch(3, 0, 10, 2000),
-    new Patch(4, 0, 0, 500)
+    new Patch(1, 0, 2, 3000),
+    new Patch(2, 104, 1, 1000),
+    new Patch(3, 0, 1, 2000),
+    new Patch(4, 0, 0, 1000)
   ];
+
+  var loopers = [];
 
   // canvas controls 
   var controlsUI = $('#brushes');
@@ -120,8 +128,6 @@ angular.module('starter.controllers', [])
     brush.style.background = brushColors[i];
     brush.style.width = ((controlsUIWidth / brushColors.length) - 3) + 'px';
     brush.style.height = '45px';
-    console.log('creating brush ' + i);
-    console.log('added brush ' + i);
     controlsUI.append(brush);
   };
 
@@ -130,11 +136,29 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < brushColors.length; i++)
       $('.brush')[i].style.outline = '0px solid #fff';
     this.style.outline = '2px solid #fff';
-    console.log('changed color to: ' + brushColor);
   });
 
+  // var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
+  // $scope.canvases = $firebase(FBref.child('canvases')).$asArray();
+  // console.log($scope.canvases);
+
   // firebase reference
-  var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/canvas/1');
+  var canvasId = $stateParams.canvasId;
+  var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/canvas/' + canvasId);
+  // console.log('Canvas: ');
+  // console.log(pixelDataRef);
+  // pixelDataRef.orderByKey().on("child_added", function(snapshot) {
+  //   console.log(snapshot.key());
+  // });
+
+  // var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
+  // var canvases = $firebase(FBref.child('canvases')).$asArray();
+  // console.log(canvases);
+  // console.log(canvases.$getRecord(canvasId));
+  // console.log(canvases.$keyAt(canvasId));
+  // console.log(canvases.$getRecord(canvasId));
+  $scope.canvasTitle = 'Canvas ' + canvasId;
+
   console.log('firebase setup done');
 
   // canvas creation
@@ -145,12 +169,13 @@ angular.module('starter.controllers', [])
       width: canvasWidth,
       height: canvasHeight,
       setup: function() {
-        console.log( 'sketch setup' );
+        console.log('sketch setup');
         $('.brush')[0].click();
       },
       update: function() {
         // console.log('update');
-        brushRadius = $('.brush-size')[0].value;
+        if ($('.brush-size')[0])
+          brushRadius = $('.brush-size')[0].value;
       },
       // Event handlers
       keydown: function() {
@@ -182,24 +207,21 @@ angular.module('starter.controllers', [])
 
     canvas.fillStyle = canvas.strokeStyle = brushColors[col];
 
-    // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
-
     canvas.lineWidth = radius;
     canvas.beginPath();
     canvas.moveTo(coordsOld[0], coordsOld[1]);
     canvas.lineTo(coords[0], coords[1]);
     canvas.stroke();
 
-    patches[col].increaseVolume();
-    // MIDI.programChange(0, 95);
-    // var note = Math.floor((coords[0] / 400) * 127);
-    // if (note < 24) note = 24;
-    // if (note > 127) note = 127;
-    // var velocity = Math.floor((coords[1] / 500) * 127);
-    // if (velocity > 127) velocity = 127;
-    // MIDI.noteOn(0, note, velocity, 0);
-    // MIDI.noteOff(0, note, 2);
+    if (col == eraser) {
+      console.log('Eraser!');
+    }
+    else {
+      patches[col].increaseVolume();
+      patches[col].increaseDensity();
+    }
   });
+
 
   pixelDataRef.on('child_changed', function (snapshot) {
     var coordsOld = snapshot.key().split(':')[1].split(',');
@@ -212,8 +234,6 @@ angular.module('starter.controllers', [])
 
     canvas.fillStyle = canvas.strokeStyle = col;
 
-    // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
-
     canvas.lineWidth = radius;
     canvas.beginPath();
     canvas.moveTo(coordsOld[0], coordsOld[1]);
@@ -222,18 +242,20 @@ angular.module('starter.controllers', [])
   });
 
   pixelDataRef.on('child_removed', function (snapshot) {
+    var colorId = snapshot.val().split(':')[0];
+    patches[colorId].decreaseVolume();
+    patches[colorId].decreaseDensity();
+
     var coordsOld = snapshot.key().split(':')[1].split(',');
     var coords = snapshot.key().split(':')[2].split(',');
-    var col = '#FFFFFF';
-
+    var color = '#FFFFFF';
+    canvas.fillStyle = canvas.strokeStyle = color;
+    var radius = snapshot.val().split(':')[1];
+    
     canvas.lineCap = 'round';
     canvas.lineJoin = 'round';
 
-    canvas.fillStyle = canvas.strokeStyle = col;
-
-    // console.log("Draw: ", coordsOld[0], coordsOld[1], coords[0], coords[1], canvas.fillStyle);
-
-    canvas.lineWidth = kMaxBrushRadius * 2;
+    canvas.lineWidth = radius + kEraserCorrectionRadius;
     canvas.beginPath();
     canvas.moveTo(coordsOld[0], coordsOld[1]);
     canvas.lineTo(coords[0], coords[1]);
@@ -249,12 +271,8 @@ angular.module('starter.controllers', [])
       "sitar"
     ],
     callback: function() {
-      // MIDI.noteOn(0, 1, 1, 0);
       console.log('MIDI loaded');
       $ionicLoading.hide();
-      // MIDI.programChange(0, 95);
-      // MIDI.noteOn(0, 36, 120, 0);
-      // MIDI.noteOff(0, 36, 5);
     }
   });
 
@@ -263,15 +281,36 @@ angular.module('starter.controllers', [])
   };
 
   // audio loopers
+  var padLooperCounter = 0;
+  var rootNote = scale[0];
   var padLooper = setInterval(function () {
     MIDI.programChange(0, patches[0].program);
-    var note = 24 + (12 * randInt(0, 1)) + scale[5];
+    if (patches[0].density > 200) 
+      if (padLooperCounter % 32 == 0)
+        rootNote = scale[randInt(0, scale.length - 1)];
+    if (patches[0].density > 400) 
+      if (padLooperCounter % 16 == 0)
+        rootNote = scale[randInt(0, scale.length - 1)];
+    if (patches[0].density > 600) 
+      if (padLooperCounter % 8 == 0)
+        rootNote = scale[randInt(0, scale.length - 1)];
+    if (patches[0].density > 800) 
+      if (padLooperCounter % 4 == 0)
+        rootNote = scale[randInt(0, scale.length - 1)];
+    if (patches[0].density > 1000) 
+      if (padLooperCounter % 2 == 0)
+        rootNote = scale[randInt(0, scale.length - 1)];
+
+    padLooperCounter = (padLooperCounter + 1) % 32;
+    var note = 36 + (12 * randInt(0, 1)) + rootNote;
+
     var velocity = patches[0].volume;
     MIDI.noteOn(0, note, velocity, 0);
     MIDI.noteOn(0, note + 12, velocity, 0);
     MIDI.noteOff(0, note, 2);
     MIDI.noteOff(0, note + 12, 2);
   }, patches[0].freq);
+  loopers.push(padLooper);
 
   var pianoLooper = setInterval(function () {
     MIDI.programChange(0, patches[1].program);
@@ -280,14 +319,17 @@ angular.module('starter.controllers', [])
     MIDI.noteOn(0, note, velocity, 0);
     MIDI.noteOff(0, note, 2);
   }, patches[1].freq); 
+  loopers.push(pianoLooper);
 
   var chimesLooper = setInterval(function () {
+    console.log(patches[2].volume);
     MIDI.programChange(0, patches[2].program);
     var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
     var velocity = patches[2].volume;
     MIDI.noteOn(0, note, velocity, 0);
     MIDI.noteOff(0, note, 2);
   }, patches[2].freq); 
+  loopers.push(chimesLooper);
 
   var chordLooper = setInterval(function () {
     MIDI.programChange(0, patches[3].program);
@@ -298,39 +340,61 @@ angular.module('starter.controllers', [])
     MIDI.noteOn(0, note + 12, velocity, 0);
     MIDI.noteOff(0, note + 12, 2);
   }, patches[3].freq); 
+  loopers.push(chordLooper);
 
   // clear canvas
   $scope.clearCanvas = function() {
     pixelDataRef.remove(function () {
       console.log('Cleared canvas');
-
-      for (var i = 0; i < brushColors.length; i++)
-        patches[i].killVolume();
     });
   };
-})
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  // custom back button
+  $scope.backToCanvases = function () {
+    // clear existing audio
+    for (var i = 0; i < loopers.length; i++) {
+      clearInterval(loopers[i]);
+    }
+    $ionicHistory.goBack();
   }
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+.controller('CanvasesCtrl', function($scope, $firebase, $ionicModal, $timeout) {
+  var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
+  $scope.canvases = $firebase(FBref.child('canvases')).$asArray();
 
-.controller('FriendsCtrl', function($scope, Friends) {
-  $scope.friends = Friends.all();
-})
+  // Form data for the createCanvasModal
+  $scope.canvasData = {};
 
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-  $scope.friend = Friends.get($stateParams.friendId);
-})
+  $ionicModal.fromTemplateUrl('templates/createNewCanvas.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.canvasModal = modal;
+  });
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
+  // Triggered in the modal to close it
+  $scope.closeCanvasModal = function() {
+    $scope.canvasModal.hide();
+  };
+
+  // Open the modal
+  $scope.openCanvasModal = function() {
+    $scope.canvasModal.show();
+    $scope.canvasData.title = 'New Canvas';
+  };
+
+  // Perform the login action when the user submits the login form
+  $scope.createNewCanvas = function() {
+    if ($scope.canvases.length != 0)
+      $scope.canvasData.id = $scope.canvases[$scope.canvases.length - 1].id + 1;
+    else 
+      $scope.canvasData.id = 1;
+    $scope.canvasData.painters = 0;
+    console.log('Creating new canvas', $scope.canvasData);
+    $scope.canvases.$add($scope.canvasData); 
+    $scope.canvasData = {};
+    $timeout(function() {
+      $scope.closeCanvasModal();
+    }, 50);
   };
 });

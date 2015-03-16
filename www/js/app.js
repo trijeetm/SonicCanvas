@@ -29,82 +29,70 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: "/tab",
+  // setup an abstract state for the app
+  .state('app', {
+    url: "/app",
     abstract: true,
-    templateUrl: "templates/tabs.html"
+    templateUrl: "templates/app.html"
   })
 
   // Each tab has its own nav history stack:
-
-  .state('tab.dash', {
-    url: '/dash',
+  .state('app.canvases', {
+    url: '/canvases',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'app': {
+        templateUrl: 'templates/canvases.html',
+        controller: 'CanvasesCtrl'
       }
     }
   })
-
-  .state('tab.discover', {
-    url: '/discover',
-    views: {
-      'tab-discover': {
-        templateUrl: 'templates/tab-discover.html',
-        controller: 'DiscoverCtrl'
+    .state('app.canvas', {
+      url: '/canvases/:canvasId',
+      views: {
+        'app': {
+          templateUrl: 'templates/canvas.html',
+          controller: 'CanvasCtrl'
+        }
       }
-    }
-  })
-
-  .state('tab.canvas', {
-    url: '/canvas',
-    views: {
-      'tab-canvas': {
-        templateUrl: 'templates/tab-canvas.html',
-        controller: 'CanvasCtrl'
-      }
-    }
-  })
+    })
 
   .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
+    url: '/chats',
+    views: {
+      'tab-chats': {
+        templateUrl: 'templates/tab-chats.html',
+        controller: 'ChatsCtrl'
       }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
+    }
+  })
+  .state('tab.chat-detail', {
+    url: '/chats/:chatId',
+    views: {
+      'tab-chats': {
+        templateUrl: 'templates/chat-detail.html',
+        controller: 'ChatDetailCtrl'
       }
-    })
+    }
+  })
 
   .state('tab.friends', {
-      url: '/friends',
-      views: {
-        'tab-friends': {
-          templateUrl: 'templates/tab-friends.html',
-          controller: 'FriendsCtrl'
-        }
+    url: '/friends',
+    views: {
+      'tab-friends': {
+        templateUrl: 'templates/tab-friends.html',
+        controller: 'FriendsCtrl'
       }
-    })
-    .state('tab.friend-detail', {
-      url: '/friend/:friendId',
-      views: {
-        'tab-friends': {
-          templateUrl: 'templates/friend-detail.html',
-          controller: 'FriendDetailCtrl'
-        }
+    }
+  })
+  .state('tab.friend-detail', {
+    url: '/friend/:friendId',
+    views: {
+      'tab-friends': {
+        templateUrl: 'templates/friend-detail.html',
+        controller: 'FriendDetailCtrl'
       }
-    })
+    }
+  })
 
   .state('tab.account', {
     url: '/account',
@@ -117,6 +105,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/app/canvases');
 
 });

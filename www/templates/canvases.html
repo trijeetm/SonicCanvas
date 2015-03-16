@@ -1,0 +1,18 @@
+<ion-view view-title="SonicCanvas World">
+  <ion-nav-bar class="bar-energized"></ion-nav-bar> 
+
+  <ion-nav-buttons side="right">
+    <button class="button button-icon energized-button icon ion-plus-circled" ng-click="openCanvasModal()"></button>
+  </ion-nav-buttons>
+
+  <ion-content>
+
+    <ion-list>
+      <ion-item ng-repeat="canvas in canvases" href="#/app/canvases/{{canvas.id}}">
+        <h5>{{canvas.id}}</h5>
+        <h2>{{canvas.title}}</h2>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

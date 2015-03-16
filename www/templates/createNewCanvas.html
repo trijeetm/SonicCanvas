@@ -1,0 +1,20 @@
+<div class="modal">
+  <ion-header-bar>
+    <h1 class="title">Create Canvas</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeCanvasModal()">Cancel</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="createNewCanvas()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Title</span>
+          <input type="text" ng-model="canvasData.title">
+        </label>
+        <button class="button button-full button-positive" type="submit">Create New Canvas</button>
+      </div>
+    </form>
+  </ion-content>
+</div>
+
