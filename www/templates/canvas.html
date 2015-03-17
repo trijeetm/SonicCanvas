@@ -1,7 +1,15 @@
-<ion-view view-title="{{canvasTitle}}">
+<ion-view view-title="{{canvas.title}}">
   <ion-nav-bar class="bar-stable">
     <ion-nav-back-button ng-click="backToCanvases()">
     </ion-nav-back-button>
+
+    <ion-nav-buttons side="right">
+      <div class="counter">
+        <i class="icon ion-ios-people">
+          <span>{{canvas.painters}}</span>
+        </i>
+      </div>
+    </ion-nav-buttons>
   </ion-nav-bar> 
 
   <ion-content>

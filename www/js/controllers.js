@@ -180,7 +180,6 @@ angular.module('starter.controllers', [])
     new Patch(9, 46, 0, 0.015, 60, 3, 12),   // harp
   ];
   var patches = padPatches.concat(percPatches).concat(leadPatches);
-  console.log(patches);
   var loopers = [];
 
   // canvas controls 
@@ -215,10 +214,6 @@ angular.module('starter.controllers', [])
     this.style.outline = '2px solid #fff';
   });
 
-  // var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
-  // $scope.canvases = $firebase(FBref.child('canvases')).$asArray();
-  // console.log($scope.canvases);
-
   // firebase reference
   var canvasId = $stateParams.canvasId;
   var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/canvas/' + canvasId);
@@ -234,7 +229,22 @@ angular.module('starter.controllers', [])
   // console.log(canvases.$getRecord(canvasId));
   // console.log(canvases.$keyAt(canvasId));
   // console.log(canvases.$getRecord(canvasId));
-  $scope.canvasTitle = 'Canvas ' + canvasId;
+  var canvasesRef = new Firebase("https://amber-torch-7567.firebaseio.com/canvases");
+  // var painters = canvasesRef.child(canvasId + '/painters');
+  // painters.set(12);
+  var canvasRef = canvasesRef.child(canvasId);
+
+  var painterLogged = false;
+
+  canvasRef.on('value', function (snapshot) {
+    console.log('value changed:', snapshot.key(), snapshot.val());
+    $scope.canvas = snapshot.val();
+    $scope.$apply();
+    if (!painterLogged) {
+      painterLogged = true;
+      canvasRef.child('painters').set($scope.canvas.painters + 1);
+    }
+  });
 
   console.log('firebase setup done');
 
@@ -464,72 +474,6 @@ angular.module('starter.controllers', [])
   }, leadLooper.period);
   loopers.push(leadLooper);
 
-
-
-  // var taikoLooperCounter = 0;
-  // var taiko = patches[4];
-  // var taikoLooper = setInterval(function () {
-  //   taikoLooperCounter = (taikoLooperCounter + 1) % 16;
-  //   var note = 24 + (12 * randInt(0, 3)) + rootNote;
-
-  //   var taikoProb = 2;
-
-  //   MIDI.programChange(taiko.channel, taiko.program);
-  //   if (taiko.density > 400) 
-  //     taikoProb = 4;
-  //   if (taiko.density > 800) 
-  //     taikoProb = 6;
-  //   if (taiko.density > 1200) 
-  //     taikoProb = 8;
-  //   if (taiko.density > 1600) 
-  //     taikoProb = 10;
-  //   if (taiko.density > 2000) 
-  //     taikoProb = 12;
-
-  //   var velocity = taiko.volume;
-  //   if (taikoLooperCounter % 8 == 0) {
-  //     taikoProb = 16;
-  //     velocity = velocity * 2;
-  //   }
-
-  //   if (randInt(0, 16) <= taikoProb) {
-  //     MIDI.noteOn(taiko.channel, note, velocity, 0);
-  //     MIDI.noteOn(taiko.channel, note + 12, velocity, 0);
-  //     MIDI.noteOff(taiko.channel, note, 2);
-  //     MIDI.noteOff(taiko.channel, note + 12, 2);
-  //   }
-  // }, taiko.freq);
-  // loopers.push(taikoLooper);
-
-  // var pianoLooper = setInterval(function () {
-  //   MIDI.programChange(0, patches[1].program);
-  //   var note = 48 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-  //   var velocity = patches[1].volume;
-  //   MIDI.noteOn(0, note, velocity, 0);
-  //   MIDI.noteOff(0, note, 2);
-  // }, patches[1].freq); 
-  // loopers.push(pianoLooper);
-
-  // var chimesLooper = setInterval(function () {
-  //   MIDI.programChange(0, patches[2].program);
-  //   var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-  //   var velocity = patches[2].volume;
-  //   MIDI.noteOn(0, note, velocity, 0);
-  //   MIDI.noteOff(0, note, 2);
-  // }, patches[2].freq); 
-  // loopers.push(chimesLooper);
-
-  // var chordLooper = setInterval(function () {
-  //   MIDI.programChange(0, patches[3].program);
-  //   var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-  //   var velocity = patches[3].volume;
-  //   MIDI.noteOn(0, note, velocity, 0);
-  //   MIDI.noteOff(0, note, 2);
-  //   MIDI.noteOn(0, note + 12, velocity, 0);
-  //   MIDI.noteOff(0, note + 12, 2);
-  // }, patches[3].freq); 
-  // loopers.push(chordLooper);
-
   // clear canvas
   $scope.clearCanvas = function() {
     pixelDataRef.remove(function () {
@@ -543,13 +487,15 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < loopers.length; i++) {
       clearInterval(loopers[i].id);
     }
+    canvasRef.child('painters').set($scope.canvas.painters - 1);
     $ionicHistory.goBack();
   }
 })
 
 .controller('CanvasesCtrl', function($scope, $firebase, $ionicModal, $timeout) {
-  var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
-  $scope.canvases = $firebase(FBref.child('canvases')).$asArray();
+  var canvasesRef = new Firebase("https://amber-torch-7567.firebaseio.com/canvases");
+  $scope.canvases = $firebase(canvasesRef).$asArray();
+  console.log($scope.canvases);
 
   // Form data for the createCanvasModal
   $scope.canvasData = {};
@@ -576,10 +522,10 @@ angular.module('starter.controllers', [])
     if ($scope.canvases.length != 0)
       $scope.canvasData.id = $scope.canvases[$scope.canvases.length - 1].id + 1;
     else 
-      $scope.canvasData.id = 1;
+      $scope.canvasData.id = 0;
     $scope.canvasData.painters = 0;
     console.log('Creating new canvas', $scope.canvasData);
-    $scope.canvases.$add($scope.canvasData); 
+    canvasesRef.child($scope.canvasData.id).set($scope.canvasData); 
     $scope.canvasData = {};
     $timeout(function() {
       $scope.closeCanvasModal();
