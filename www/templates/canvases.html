@@ -9,8 +9,8 @@
 
     <ion-list>
       <ion-item ng-repeat="canvas in canvases" href="#/app/canvases/{{canvas.id}}">
-        <h5>{{canvas.id}}</h5>
         <h2>{{canvas.title}}</h2>
+        <h5>Painters: {{canvas.painters}}</h5>
       </ion-item>
     </ion-list>
 

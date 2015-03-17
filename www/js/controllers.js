@@ -8,24 +8,58 @@ angular.module('starter.controllers', [])
       }
   }
 
+  // class: Looper
+  var kLooperCounterLimit = 32;
+  function Looper (period, type) {
+    this.id = -1;
+    this.period = period;
+    this.type = type;
+    this.counter = 0;
+  };
+  Looper.prototype.advanceCounter = function() {
+    this.counter = (this.counter + 1) % kLooperCounterLimit;
+  };
+  Looper.prototype.isNthBeat = function(beatNo) {
+    if (this.counter % beatNo == 0)
+      return true;
+    else
+      return false;
+  };
+
   // class: Patch
-  function Patch(channel, program, minVolume, freq) {
+  function Patch(channel, program, minVolume, deltaVol, lowestNote, octaveRange, harmony) {
     this.channel = channel;
     this.program = program;
     this.minVolume = minVolume;
+    this.deltaVol = deltaVol;
+    this.lowestNote = lowestNote;
+    this.octaveRange = octaveRange;
+    this.harmony = harmony;
     this.volume = 0;
     this.density = 0;
-    this.freq = freq;
-  }
+  };
+  Patch.prototype.firePatch = function(note, gain) {
+    var program = this.program;
+    if (this.program == 122)
+      program = 122 + randInt(0, 2);
+    MIDI.programChange(this.channel, program);
+    note = (randInt(0, this.octaveRange) * 12) + this.lowestNote + note;
+    MIDI.noteOn(this.channel, note, this.volume * gain, 0);
+    MIDI.noteOff(this.channel, note, 2);
+    if (this.harmony != 0) {
+      MIDI.noteOn(this.channel, note + this.harmony, this.volume * gain, 0);
+      MIDI.noteOff(this.channel, note + this.harmony, 2);
+    }
+  };
   Patch.prototype.increaseVolume = function() {
-    if (this.volume === 0)
+    if (this.volume == 0)
       this.volume = this.minVolume;
     if (this.volume < 127)
-      this.volume = this.volume + 0.025;
+      this.volume = this.volume + this.deltaVol;
   };
   Patch.prototype.decreaseVolume = function() {
     if (this.volume > 0)
-      this.volume = this.volume - 0.025;
+      this.volume = this.volume - this.deltaVol;
     if (Math.floor(this.volume) === this.minVolume)
       this.volume = 0;
   };
@@ -95,40 +129,83 @@ angular.module('starter.controllers', [])
   var canvasHeight = $(window).height() - controlsUIHeight;
   var brushColor = 0;
   var brushColors = [
-    '#445878', 'orange', 'crimson', 'dodgerblue', 'teal', 'yellowgreen', 'white'
+    'slategrey', '#445878', 'slateblue', 'dodgerblue', 'white',
+    'teal', 'yellowgreen', 'gold', 'orange', 'crimson'
   ];
-  var eraser = brushColors.length - 1;
+  // var eraser = brushColors.length - 1;
   var brushRadius = 10;
   var kEraserCorrectionRadius = 1;
 
   // music globals
-  var scale = [
+  var scaleTypes = [];
+  var pentatonicMajorOffsets = [
+    midiNotes['c0'],
+    midiNotes['d0'],
+    midiNotes['f0'],
+    midiNotes['g0'],
+    midiNotes['a0']
+  ];
+  var pentatonicMinorOffsets = [
     midiNotes['c0'],
     midiNotes['d_0'],
     midiNotes['f0'],
     midiNotes['g0'],
     midiNotes['a_0']
   ];
+  scaleTypes.push(pentatonicMinorOffsets);
+  scaleTypes.push(pentatonicMajorOffsets);
+  var root = ($stateParams.canvasId * 69) % 12;
+  var scaleType = ($stateParams.canvasId * 69) % 2;
+  var scale = [];
+  for (var i = 0; i < scaleTypes[scaleType].length; i++) {
+    scale.push(root + scaleTypes[scaleType][i]);
+  }
 
-  var patches = [
-    new Patch(0, 95, 0, 1000),
-    new Patch(1, 0, 2, 3000),
-    new Patch(2, 104, 1, 1000),
-    new Patch(3, 0, 1, 2000),
-    new Patch(4, 0, 0, 1000)
+  console.log(scaleType, root, scale);
+
+  var padPatches = [
+    new Patch(0, 95, 0, 0.01, 24, 2, 12),   // sweep
+    new Patch(1, 93, 0, 0.01, 48, 2, 12),   // metal
+    new Patch(2, 102, 0, 0.02, 72, 2, 0),   // echodrops
+    new Patch(3, 42, 0, 0.01, 36, 2, 7),   // cello
+    new Patch(4, 122, 0.5, 0.05, 24, 4, 0)    // sea/bird
   ];
-
+  var percPatches = [
+    new Patch(5, 116, 10, 0.05, 24, 1, 12),   // taiko
+    new Patch(6, 14, 1, 0.03, 48, 2, 12),   // bells
+    new Patch(7, 9, 1, 0.03, 60, 2, 12)   // glock
+  ];
+  var leadPatches = [
+    new Patch(8, 104, 0, 0.02, 48, 3, 12),   // sitar
+    new Patch(9, 46, 0, 0.015, 60, 3, 12),   // harp
+  ];
+  var patches = padPatches.concat(percPatches).concat(leadPatches);
+  console.log(patches);
   var loopers = [];
 
   // canvas controls 
   var controlsUI = $('#brushes');
-  for (var i = 0; i < brushColors.length; i++) {
+  var brushSet = document.createElement('div');
+  brushSet.className = 'brushset pad';
+  controlsUI.append(brushSet);
+  for (var i = 0; i < brushColors.length / 2; i++) {
     var brush = document.createElement('div');
     brush.className = 'brush ' + i;
     brush.style.background = brushColors[i];
-    brush.style.width = ((controlsUIWidth / brushColors.length) - 3) + 'px';
-    brush.style.height = '45px';
-    controlsUI.append(brush);
+    brush.style.width = ((controlsUIWidth / (brushColors.length / 2)) - 3) + 'px';
+    brush.style.height = '60px';
+    $(brushSet).append(brush);
+  };
+  brushSet = document.createElement('div');
+  brushSet.className = 'brushset perc';
+  controlsUI.append(brushSet);
+  for (var i = brushColors.length / 2; i < brushColors.length; i++) {
+    var brush = document.createElement('div');
+    brush.className = 'brush ' + i;
+    brush.style.background = brushColors[i];
+    brush.style.width = ((controlsUIWidth / (brushColors.length / 2)) - 3) + 'px';
+    brush.style.height = '60px';
+    $(brushSet).append(brush);
   };
 
   $('.brush').click(function() {
@@ -191,7 +268,7 @@ angular.module('starter.controllers', [])
 
             this.fillStyle = this.strokeStyle = brushColors[brushColor];
 
-            pixelDataRef.child(Date.now() + ':' + touch.ox + ',' + touch.oy + ':' + touch.x + ',' + touch.y).set(brushColor + ':' + brushRadius);
+            pixelDataRef.child(Date.now() + ':' + Math.floor(touch.ox) + ',' + Math.floor(touch.oy) + ':' + Math.floor(touch.x) + ',' + Math.floor(touch.y)).set(brushColor + ':' + brushRadius);
         }
       }
   });
@@ -213,13 +290,13 @@ angular.module('starter.controllers', [])
     canvas.lineTo(coords[0], coords[1]);
     canvas.stroke();
 
-    if (col == eraser) {
-      console.log('Eraser!');
-    }
-    else {
-      patches[col].increaseVolume();
-      patches[col].increaseDensity();
-    }
+    // if (col == eraser) {
+    //   console.log('Eraser!');
+    // }
+    // else {
+    patches[col].increaseVolume();
+    patches[col].increaseDensity();
+    // }
   });
 
 
@@ -266,9 +343,18 @@ angular.module('starter.controllers', [])
   MIDI.loadPlugin({
     soundfontUrl: "./soundfont/FluidR3_GM/",
     instruments: [
-      "acoustic_grand_piano", 
       "pad_8_sweep",
-      "sitar"
+      "cello",
+      "pad_6_metallic",
+      "fx_7_echoes",
+      "bird_tweet",
+      "seashore",
+      "sitar",
+      "orchestral_harp",
+      "taiko_drum",
+      "glockenspiel",
+      "tubular_bells",
+      "acoustic_grand_piano"
     ],
     callback: function() {
       console.log('MIDI loaded');
@@ -281,66 +367,168 @@ angular.module('starter.controllers', [])
   };
 
   // audio loopers
-  var padLooperCounter = 0;
   var rootNote = scale[0];
-  var padLooper = setInterval(function () {
-    MIDI.programChange(0, patches[0].program);
-    if (patches[0].density > 200) 
-      if (padLooperCounter % 32 == 0)
-        rootNote = scale[randInt(0, scale.length - 1)];
-    if (patches[0].density > 400) 
-      if (padLooperCounter % 16 == 0)
-        rootNote = scale[randInt(0, scale.length - 1)];
-    if (patches[0].density > 600) 
-      if (padLooperCounter % 8 == 0)
-        rootNote = scale[randInt(0, scale.length - 1)];
-    if (patches[0].density > 800) 
-      if (padLooperCounter % 4 == 0)
-        rootNote = scale[randInt(0, scale.length - 1)];
-    if (patches[0].density > 1000) 
-      if (padLooperCounter % 2 == 0)
-        rootNote = scale[randInt(0, scale.length - 1)];
+  var padLooper = new Looper(1000, 'pad');
+  padLooper.id = setInterval(function () {
+    padLooper.advanceCounter();
+    
+    var maxDensity = padPatches[0].density;
+    for (var i = 1; i < padPatches.length; i++) {
+      if (padPatches[i].density > maxDensity)
+        maxDensity = padPatches[i].density;
+    }
 
-    padLooperCounter = (padLooperCounter + 1) % 32;
-    var note = 36 + (12 * randInt(0, 1)) + rootNote;
+    if (maxDensity > 200) 
+      if (padLooper.isNthBeat(32))
+        rootNote = scale[randInt(0, scale.length)];
+    if (maxDensity > 400) 
+      if (padLooper.isNthBeat(16))
+        rootNote = scale[randInt(0, scale.length)];
+    if (maxDensity > 600) 
+      if (padLooper.isNthBeat(8))
+        rootNote = scale[randInt(0, scale.length)];
+    if (maxDensity > 800) 
+      if (padLooper.isNthBeat(4))
+        rootNote = scale[randInt(0, scale.length)];
+    if (maxDensity > 1000) 
+      if (padLooper.isNthBeat(2))
+        rootNote = scale[randInt(0, scale.length)];
 
-    var velocity = patches[0].volume;
-    MIDI.noteOn(0, note, velocity, 0);
-    MIDI.noteOn(0, note + 12, velocity, 0);
-    MIDI.noteOff(0, note, 2);
-    MIDI.noteOff(0, note + 12, 2);
-  }, patches[0].freq);
+    for (var i = 0; i < padPatches.length; i++) {
+      padPatches[i].firePatch(rootNote, 1);
+    }
+  }, padLooper.period);
   loopers.push(padLooper);
 
-  var pianoLooper = setInterval(function () {
-    MIDI.programChange(0, patches[1].program);
-    var note = 48 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-    var velocity = patches[1].volume;
-    MIDI.noteOn(0, note, velocity, 0);
-    MIDI.noteOff(0, note, 2);
-  }, patches[1].freq); 
-  loopers.push(pianoLooper);
+  var percLooper = new Looper(500, 'perc');
+  percLooper.id = setInterval(function () {
+    percLooper.advanceCounter();
 
-  var chimesLooper = setInterval(function () {
-    console.log(patches[2].volume);
-    MIDI.programChange(0, patches[2].program);
-    var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-    var velocity = patches[2].volume;
-    MIDI.noteOn(0, note, velocity, 0);
-    MIDI.noteOff(0, note, 2);
-  }, patches[2].freq); 
-  loopers.push(chimesLooper);
+    for (var i = 0; i < percPatches.length; i++) {
+      var hitProb = 2, gain = 0.8 + (0.1 * randInt(0, 4));
+      if (percPatches[i].density > 400) 
+        hitProb = 4;
+      if (percPatches[i].density > 800) 
+        hitProb = 6;
+      if (percPatches[i].density > 1200) 
+        hitProb = 8;
+      if (percPatches[i].density > 1600) 
+        hitProb = 10;
+      if (percPatches[i].density > 2000) 
+        hitProb = 12;
 
-  var chordLooper = setInterval(function () {
-    MIDI.programChange(0, patches[3].program);
-    var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
-    var velocity = patches[3].volume;
-    MIDI.noteOn(0, note, velocity, 0);
-    MIDI.noteOff(0, note, 2);
-    MIDI.noteOn(0, note + 12, velocity, 0);
-    MIDI.noteOff(0, note + 12, 2);
-  }, patches[3].freq); 
-  loopers.push(chordLooper);
+      if (percLooper.isNthBeat(8)) {
+        gain = 1.5 + (0.1 * randInt(0, 6));
+        hitProb = 16;
+      }
+
+      if (randInt(0, 17) <= hitProb) {
+        var note = scale[randInt(0, scale.length)];
+        percPatches[i].firePatch(note, gain);
+      }
+    }
+  }, percLooper.period);
+  loopers.push(percLooper);
+
+  var leadLooper = new Looper(250, 'lead');
+  leadLooper.id = setInterval(function () {
+    leadLooper.advanceCounter();
+
+    for (var i = 0; i < leadPatches.length; i++) {
+      var hitProb = 2, gain = 0.6 + (0.1 * randInt(0, 8));
+      if (leadPatches[i].density > 400) 
+        hitProb = 4;
+      if (leadPatches[i].density > 800) 
+        hitProb = 6;
+      if (leadPatches[i].density > 1200) 
+        hitProb = 8;
+      if (leadPatches[i].density > 1600) 
+        hitProb = 10;
+      if (leadPatches[i].density > 2000) 
+        hitProb = 12;
+
+      if (leadLooper.isNthBeat(4)) {
+        gain = 1.5 + (0.1 * randInt(0, 10));
+        hitProb = 24;
+      }
+
+      if (randInt(0, 24) <= hitProb) {
+        var note = scale[randInt(0, scale.length)];
+        leadPatches[i].firePatch(note, gain);
+      }
+      if (randInt(0, 24) <= hitProb) {
+        var note = scale[randInt(0, scale.length)];
+        leadPatches[i].firePatch(note, gain);
+      }
+    }
+  }, leadLooper.period);
+  loopers.push(leadLooper);
+
+
+
+  // var taikoLooperCounter = 0;
+  // var taiko = patches[4];
+  // var taikoLooper = setInterval(function () {
+  //   taikoLooperCounter = (taikoLooperCounter + 1) % 16;
+  //   var note = 24 + (12 * randInt(0, 3)) + rootNote;
+
+  //   var taikoProb = 2;
+
+  //   MIDI.programChange(taiko.channel, taiko.program);
+  //   if (taiko.density > 400) 
+  //     taikoProb = 4;
+  //   if (taiko.density > 800) 
+  //     taikoProb = 6;
+  //   if (taiko.density > 1200) 
+  //     taikoProb = 8;
+  //   if (taiko.density > 1600) 
+  //     taikoProb = 10;
+  //   if (taiko.density > 2000) 
+  //     taikoProb = 12;
+
+  //   var velocity = taiko.volume;
+  //   if (taikoLooperCounter % 8 == 0) {
+  //     taikoProb = 16;
+  //     velocity = velocity * 2;
+  //   }
+
+  //   if (randInt(0, 16) <= taikoProb) {
+  //     MIDI.noteOn(taiko.channel, note, velocity, 0);
+  //     MIDI.noteOn(taiko.channel, note + 12, velocity, 0);
+  //     MIDI.noteOff(taiko.channel, note, 2);
+  //     MIDI.noteOff(taiko.channel, note + 12, 2);
+  //   }
+  // }, taiko.freq);
+  // loopers.push(taikoLooper);
+
+  // var pianoLooper = setInterval(function () {
+  //   MIDI.programChange(0, patches[1].program);
+  //   var note = 48 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
+  //   var velocity = patches[1].volume;
+  //   MIDI.noteOn(0, note, velocity, 0);
+  //   MIDI.noteOff(0, note, 2);
+  // }, patches[1].freq); 
+  // loopers.push(pianoLooper);
+
+  // var chimesLooper = setInterval(function () {
+  //   MIDI.programChange(0, patches[2].program);
+  //   var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
+  //   var velocity = patches[2].volume;
+  //   MIDI.noteOn(0, note, velocity, 0);
+  //   MIDI.noteOff(0, note, 2);
+  // }, patches[2].freq); 
+  // loopers.push(chimesLooper);
+
+  // var chordLooper = setInterval(function () {
+  //   MIDI.programChange(0, patches[3].program);
+  //   var note = 72 + (12 * randInt(0, 1)) + scale[randInt(0, scale.length)];
+  //   var velocity = patches[3].volume;
+  //   MIDI.noteOn(0, note, velocity, 0);
+  //   MIDI.noteOff(0, note, 2);
+  //   MIDI.noteOn(0, note + 12, velocity, 0);
+  //   MIDI.noteOff(0, note + 12, 2);
+  // }, patches[3].freq); 
+  // loopers.push(chordLooper);
 
   // clear canvas
   $scope.clearCanvas = function() {
@@ -353,7 +541,7 @@ angular.module('starter.controllers', [])
   $scope.backToCanvases = function () {
     // clear existing audio
     for (var i = 0; i < loopers.length; i++) {
-      clearInterval(loopers[i]);
+      clearInterval(loopers[i].id);
     }
     $ionicHistory.goBack();
   }
