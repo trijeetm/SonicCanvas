@@ -123,7 +123,7 @@ angular.module('starter.controllers', [])
   });
 
   // canvas globals
-  var controlsUIHeight = 49 + 24;
+  var controlsUIHeight = 49 + 50;
   var controlsUIWidth = $(window).width();
   var canvasWidth = $(window).width();
   var canvasHeight = $(window).height() - controlsUIHeight;
@@ -137,6 +137,7 @@ angular.module('starter.controllers', [])
   var kEraserCorrectionRadius = 1;
 
   // music globals
+  var MIDILoaded = false;
   var scaleTypes = [];
   var pentatonicMajorOffsets = [
     midiNotes['c0'],
@@ -161,13 +162,29 @@ angular.module('starter.controllers', [])
     scale.push(root + scaleTypes[scaleType][i]);
   }
 
-  console.log(scaleType, root, scale);
-
+// mobile build (limited instruments)
+  // var padPatches = [
+  //   new Patch(3, 42, 0, 0.01, 24, 2, 7),   // cello
+  //   new Patch(3, 42, 0, 0.01, 36, 2, 7),   // cello
+  //   new Patch(3, 42, 0, 0.01, 36, 2, 7),    // cello
+  //   new Patch(3, 42, 0, 0.01, 48, 2, 7),   // cello
+  //   new Patch(3, 42, 0, 0.01, 48, 2, 7)    // cello
+  // ];
+  // var percPatches = [
+  //   new Patch(5, 116, 10, 0.05, 24, 1, 12),   // taiko
+  //   new Patch(5, 116, 10, 0.03, 24, 1, 12)   // taiko
+  // ];
+  // var leadPatches = [
+  //   new Patch(8, 104, 0, 0.01, 36, 2, 12),   // sitar
+  //   new Patch(8, 104, 0, 0.01, 48, 2, 12),   // sitar
+  //   new Patch(8, 104, 0, 0.01, 60, 2, 12)    // sitar
+  // ];
+// regular build
   var padPatches = [
     new Patch(0, 95, 0, 0.01, 24, 2, 12),   // sweep
     new Patch(1, 93, 0, 0.01, 48, 2, 12),   // metal
     new Patch(2, 102, 0, 0.02, 72, 2, 0),   // echodrops
-    new Patch(3, 42, 0, 0.01, 36, 2, 7),   // cello
+    new Patch(3, 42, 0, 0.02, 36, 2, 7),   // cello
     new Patch(4, 122, 0.5, 0.05, 24, 4, 0)    // sea/bird
   ];
   var percPatches = [
@@ -177,8 +194,9 @@ angular.module('starter.controllers', [])
   ];
   var leadPatches = [
     new Patch(8, 104, 0, 0.02, 48, 3, 12),   // sitar
-    new Patch(9, 46, 0, 0.015, 60, 3, 12),   // harp
+    new Patch(9, 46, 0, 0.02, 60, 3, 12),   // harp
   ];
+
   var patches = padPatches.concat(percPatches).concat(leadPatches);
   var loopers = [];
 
@@ -217,29 +235,15 @@ angular.module('starter.controllers', [])
   // firebase reference
   var canvasId = $stateParams.canvasId;
   var pixelDataRef = new Firebase('https://amber-torch-7567.firebaseio.com/canvas/' + canvasId);
-  // console.log('Canvas: ');
-  // console.log(pixelDataRef);
-  // pixelDataRef.orderByKey().on("child_added", function(snapshot) {
-  //   console.log(snapshot.key());
-  // });
 
-  // var FBref = new Firebase("https://amber-torch-7567.firebaseio.com/");
-  // var canvases = $firebase(FBref.child('canvases')).$asArray();
-  // console.log(canvases);
-  // console.log(canvases.$getRecord(canvasId));
-  // console.log(canvases.$keyAt(canvasId));
-  // console.log(canvases.$getRecord(canvasId));
   var canvasesRef = new Firebase("https://amber-torch-7567.firebaseio.com/canvases");
-  // var painters = canvasesRef.child(canvasId + '/painters');
-  // painters.set(12);
   var canvasRef = canvasesRef.child(canvasId);
 
   var painterLogged = false;
 
   canvasRef.on('value', function (snapshot) {
-    console.log('value changed:', snapshot.key(), snapshot.val());
     $scope.canvas = snapshot.val();
-    $scope.$apply();
+    // $scope.$apply();
     if (!painterLogged) {
       painterLogged = true;
       canvasRef.child('painters').set($scope.canvas.painters + 1);
@@ -260,7 +264,6 @@ angular.module('starter.controllers', [])
         $('.brush')[0].click();
       },
       update: function() {
-        // console.log('update');
         if ($('.brush-size')[0])
           brushRadius = $('.brush-size')[0].value;
       },
@@ -300,13 +303,8 @@ angular.module('starter.controllers', [])
     canvas.lineTo(coords[0], coords[1]);
     canvas.stroke();
 
-    // if (col == eraser) {
-    //   console.log('Eraser!');
-    // }
-    // else {
     patches[col].increaseVolume();
     patches[col].increaseDensity();
-    // }
   });
 
 
@@ -352,23 +350,48 @@ angular.module('starter.controllers', [])
   // MIDI 
   MIDI.loadPlugin({
     soundfontUrl: "./soundfont/FluidR3_GM/",
+  // mobile build (crashes on multiple sounds)
+    // instruments: [
+    //   "cello",
+    //   "taiko_drum",
+    //   "sitar",
+    // ],
+  // regular build
     instruments: [
       "pad_8_sweep",
-      "cello",
       "pad_6_metallic",
       "fx_7_echoes",
+      "cello",
       "bird_tweet",
       "seashore",
-      "sitar",
-      "orchestral_harp",
       "taiko_drum",
-      "glockenspiel",
       "tubular_bells",
-      "acoustic_grand_piano"
+      "glockenspiel",
+      "sitar",
+      "orchestral_harp"
     ],
     callback: function() {
-      console.log('MIDI loaded');
+      MIDILoaded = true;
+      console.log('MIDIloaded');
       $ionicLoading.hide();
+
+      // load next batch
+      // MIDI.loadPlugin({
+      //   soundfontUrl: "./soundfont/FluidR3_GM/",
+      //   instruments: [
+      //     "taiko_drum",
+      //     "tubular_bells",
+      //     "glockenspiel",
+      //     "sitar",
+      //     "orchestral_harp"
+      //   ],
+      //   callback: function() {
+      //     MIDILoaded = true;
+      //     console.log('MIDI loaded');
+      //     $ionicLoading.hide();
+      //   }
+      // });
+
     }
   });
 
@@ -380,6 +403,7 @@ angular.module('starter.controllers', [])
   var rootNote = scale[0];
   var padLooper = new Looper(1000, 'pad');
   padLooper.id = setInterval(function () {
+    if (!MIDILoaded) return;
     padLooper.advanceCounter();
     
     var maxDensity = padPatches[0].density;
@@ -412,6 +436,7 @@ angular.module('starter.controllers', [])
 
   var percLooper = new Looper(500, 'perc');
   percLooper.id = setInterval(function () {
+    if (!MIDILoaded) return;
     percLooper.advanceCounter();
 
     for (var i = 0; i < percPatches.length; i++) {
@@ -442,6 +467,7 @@ angular.module('starter.controllers', [])
 
   var leadLooper = new Looper(250, 'lead');
   leadLooper.id = setInterval(function () {
+    if (!MIDILoaded) return;
     leadLooper.advanceCounter();
 
     for (var i = 0; i < leadPatches.length; i++) {
@@ -495,7 +521,6 @@ angular.module('starter.controllers', [])
 .controller('CanvasesCtrl', function($scope, $firebase, $ionicModal, $timeout) {
   var canvasesRef = new Firebase("https://amber-torch-7567.firebaseio.com/canvases");
   $scope.canvases = $firebase(canvasesRef).$asArray();
-  console.log($scope.canvases);
 
   // Form data for the createCanvasModal
   $scope.canvasData = {};

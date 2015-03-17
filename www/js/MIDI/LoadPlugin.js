@@ -116,17 +116,32 @@ connect.webaudio = function(filetype, instruments, conf) {
 	var queue = createQueue({
 		items: instruments,
 		getNext: function(instrumentId) {
+			console.log('Loading instrument ', instrumentId);
 			DOMLoader.sendRequest({
 				url: MIDI.soundfontUrl + instrumentId + "-" + filetype + ".js",
 				onprogress: getPercent,
+				onerror: function(event) {
+					console.log(event);
+				},
 				onload: function(response) {
 					addSoundfont(response.responseText);
 					if (MIDI.loader) MIDI.loader.update(null, "Downloading...", 100);
+					console.log('Loaded instrument');
 					queue.getNext();
 				}
 			});
+			// DOMLoader.script.add({
+   //              src: MIDI.soundfontUrl + instrumentId + "-" + filetype + ".js",
+   //              verify: "MIDI.Soundfont." + instrumentId,
+   //              callback: function() {
+   //                  if (MIDI.loader) MIDI.loader.update(null, "Downloading...", 100);
+   //                  console.log('Loaded instrument');
+   //                  queue.getNext();
+   //              }
+   //      	});
 		},
 		onComplete: function() {
+			console.log('Done loading!');
 			MIDI.WebAudio.connect(conf);
 		}
 	});
